@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.droid.zohotask.model.response.Result
 import com.droid.zohotask.model.response.UserResponseItem
 import com.droid.zohotask.utils.DispatcherProvider
 import com.droid.zohotask.utils.Resource
@@ -21,7 +22,7 @@ class MainViewModel @ViewModelInject constructor(
 ) : ViewModel(){
 
     sealed class UserListEvent {
-        class Success(val result: UserResponseItem) : UserListEvent()
+        class Success(val result: List<Result>) : UserListEvent()
         class Failure(val error: String) : UserListEvent()
         object Loading : UserListEvent()
         object Empty : UserListEvent()
@@ -44,7 +45,7 @@ class MainViewModel @ViewModelInject constructor(
                         if (data == null) {
                             _userList.value = UserListEvent.Failure("UnExpected Error")
                         } else {
-                            _userList.value = UserListEvent.Success(data)
+                            _userList.value = UserListEvent.Success(data.results)
                         }
                     }
             }
