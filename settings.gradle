@@ -1,0 +1,2 @@
+rootProject.name = "ZohoTask"
+include ':app'
