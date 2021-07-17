@@ -10,7 +10,7 @@ import java.io.Serializable
 )
 data class Result(
     @PrimaryKey(autoGenerate = true)
-    @SerializedName("id")
+    @SerializedName("dbid")
     var dbid: Int,
     @SerializedName("cell")
     val cell: String?,
