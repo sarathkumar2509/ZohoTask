@@ -1,5 +1,9 @@
 package com.droid.zohotask.di
 
+import android.content.Context
+import androidx.room.Room
+import com.droid.zohotask.db.UserDatabase
+import com.droid.zohotask.db.UserListDao
 import com.droid.zohotask.main.DefaultMainRepository
 import com.droid.zohotask.main.MainRepository
 import com.droid.zohotask.model.UserApi
@@ -9,6 +13,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
@@ -33,6 +38,12 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun providesDatabase(db: UserDatabase) : UserListDao{
+        return db.getUserListDao()
+    }
+
+    @Singleton
+    @Provides
     fun provideMainRepository(api: UserApi) : MainRepository = DefaultMainRepository(api)
 
     @Singleton
@@ -47,5 +58,21 @@ object AppModule {
         override val unconfined: CoroutineDispatcher
             get() = Dispatchers.Unconfined
 
+    }
+
+    @Provides
+    @Singleton
+    fun provideBookDao(appDatabase: UserDatabase): UserListDao {
+        return appDatabase.getUserListDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext appContext: Context): UserDatabase {
+        return Room.databaseBuilder(
+            appContext,
+            UserDatabase::class.java,
+            "user_list.db"
+        ).build()
     }
 }

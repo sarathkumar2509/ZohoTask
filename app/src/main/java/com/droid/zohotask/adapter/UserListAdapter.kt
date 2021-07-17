@@ -53,9 +53,9 @@ class UserListAdapter(private val context: Context, private val onUserListItemCl
         val userListResponse = userListResponse[position]
         holder.binding.apply {
 
-            Glide.with(context).load(userListResponse.picture.medium).placeholder(R.drawable.ic_baseline_account_circle_24).circleCrop().into(ivPicture)
+            Glide.with(context).load(userListResponse.picture?.medium).placeholder(R.drawable.ic_baseline_account_circle_24).circleCrop().into(ivPicture)
 
-            userListResponse.picture.thumbnail
+            userListResponse.picture?.thumbnail
         }
         holder.itemView.setOnClickListener{
             onUserListItemClickListener.onClick(userListResponse)

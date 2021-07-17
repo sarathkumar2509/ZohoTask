@@ -27,7 +27,7 @@ class DefaultMainRepository @Inject constructor(
                 Resource.Error(response.message())
             }
         } catch (e: Exception) {
-            Log.d("DefaultMainRepoEXP","ERROR")
+            Log.d("DefaultMainRepoEXP","ERROR ${e.message}")
             Resource.Error(e.message ?: "An Error Occurred")
         }
     }
