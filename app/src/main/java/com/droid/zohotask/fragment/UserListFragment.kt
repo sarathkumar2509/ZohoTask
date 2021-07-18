@@ -14,7 +14,7 @@ import com.droid.zohotask.adapter.UserListAdapter
 import com.droid.zohotask.databinding.FragmentUserListBinding
 import com.droid.zohotask.listener.OnUserListItemClick
 import com.droid.zohotask.main.MainViewModel
-import com.droid.zohotask.model.response.Result
+import com.droid.zohotask.model.useresponse.Result
 import kotlinx.coroutines.flow.collect
 
 /**
@@ -44,6 +44,8 @@ class UserListFragment : Fragment(R.layout.fragment_user_list){
         viewModel.getUserList()
 
         setupRecyclerView()
+
+        //viewModel.getWeather()
 
         lifecycleScope.launchWhenCreated {
             viewModel.userList.collect { event ->

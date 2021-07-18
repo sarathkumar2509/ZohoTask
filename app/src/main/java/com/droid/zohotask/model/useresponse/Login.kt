@@ -1,4 +1,4 @@
-package com.droid.zohotask.model.response
+package com.droid.zohotask.model.useresponse
 
 data class Login(
     val md5: String,
