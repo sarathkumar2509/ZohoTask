@@ -11,14 +11,10 @@ d
 4app/src/main/java/com/droid/zohotask/di/AppModule.kt,2\f\2fcc0e110a701e4f08368da2aa8d4f79295091c5
 <
 build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
-@
-app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
 P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 e
 5app/src/main/java/com/droid/zohotask/db/Converters.kt,b\e\beb70806eb321e8c90fac7299ef971242033dda0
-r
-Bapp/src/main/java/com/droid/zohotask/model/response/Coordinates.kt,f\d\fdd3a89a59012b7dbb2db7070c10ca4140489672
 j
 :app/src/main/java/com/droid/zohotask/model/response/Dob.kt,d\a\da09e3eae18c902cc6601640e3db0773378bc7df
 i
@@ -31,9 +27,5 @@ l
 <app/src/main/java/com/droid/zohotask/model/response/Login.kt,3\1\31c0c8d20153700666caa7ef19a2a04d9e983fa4
 k
 ;app/src/main/java/com/droid/zohotask/model/response/Name.kt,0\4\0430a32a47e04fb7fd8d55d85d70316b6da0556b
-n
->app/src/main/java/com/droid/zohotask/model/response/Picture.kt,a\a\aa2d09e2ec504a57e78b98ab405abc2f99508905
-q
-Aapp/src/main/java/com/droid/zohotask/model/response/Registered.kt,4\a\4a513375bad42bc5fb64e5bcf8529f951256185d
 m
 =app/src/main/java/com/droid/zohotask/model/response/Result.kt,5\4\54768438fba98154837318cecf8c5780ac0f5390

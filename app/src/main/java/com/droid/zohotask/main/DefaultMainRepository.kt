@@ -19,8 +19,6 @@ class DefaultMainRepository @Inject constructor(
         return try {
             Log.d("DefaultMainRepository","$count")
             Log.d("DefaultMainRepository","$count")
-            val response = api.getUserList(count)
-
             val response = api.getUserList(20)
 
             Log.d("DefaultMainRepository","$response")

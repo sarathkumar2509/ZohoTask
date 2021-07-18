@@ -57,7 +57,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list){
                         Log.d("UserListFragment","$result")
                     }
                     is MainViewModel.UserListEvent.Failure->{
-                            viewModel.getUserList(5)
+                            viewModel.getUserList(20)
                     //Show Toast
                     }
                     is MainViewModel.UserListEvent.Loading->{
