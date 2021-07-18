@@ -7,5 +7,21 @@
     <fragment
         android:id="@+id/userListFragment"
         android:name="com.droid.zohotask.fragment.UserListFragment"
-        android:label="UserListFragment" />
+        android:label="UserListFragment" >
+        <action
+            android:id="@+id/action_userListFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/userDetailFragment"
+        android:name="com.droid.zohotask.fragment.UserDetailFragment"
+        android:label="UserDetailFragment">
+
+        <argument
+            android:name="userDetail"
+            app:argType="com.droid.zohotask.model.response.Result" />
+    </fragment>
+
+
 </navigation>
