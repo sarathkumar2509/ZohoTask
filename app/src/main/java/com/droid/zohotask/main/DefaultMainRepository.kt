@@ -5,6 +5,7 @@ import com.droid.zohotask.model.UserApi
 import com.droid.zohotask.model.response.Result
 import com.droid.zohotask.model.response.UserResponseItem
 import com.droid.zohotask.utils.Resource
+import org.xml.sax.Parser
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -14,9 +15,11 @@ import javax.inject.Inject
 class DefaultMainRepository @Inject constructor(
     private val api: UserApi
 ) : MainRepository{
-    override suspend fun getUserList(): Resource<UserResponseItem> {
+    override suspend fun getUserList(count : Int): Resource<UserResponseItem> {
         return try {
-            val response = api.getUserList(5)
+            Log.d("DefaultMainRepository","$count")
+            Log.d("DefaultMainRepository","$count")
+            val response = api.getUserList(count)
             Log.d("DefaultMainRepository","$response")
             val result = response.body()
             if (response.isSuccessful && result != null) {
@@ -31,4 +34,5 @@ class DefaultMainRepository @Inject constructor(
             Resource.Error(e.message ?: "An Error Occurred")
         }
     }
+    //check exception
 }
