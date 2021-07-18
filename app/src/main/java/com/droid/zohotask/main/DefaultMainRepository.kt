@@ -16,7 +16,7 @@ class DefaultMainRepository @Inject constructor(
 ) : MainRepository{
     override suspend fun getUserList(): Resource<UserResponseItem> {
         return try {
-            val response = api.getUserList(5)
+            val response = api.getUserList(20)
             Log.d("DefaultMainRepository","$response")
             val result = response.body()
             if (response.isSuccessful && result != null) {
