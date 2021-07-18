@@ -54,8 +54,9 @@ class UserListAdapter(private val context: Context, private val onUserListItemCl
         holder.binding.apply {
 
             Glide.with(context).load(userListResponse.picture.medium).placeholder(R.drawable.ic_baseline_account_circle_24).circleCrop().into(ivPicture)
-
-            userListResponse.picture.thumbnail
+            tvFirstName.text = userListResponse.name.first
+            tvLastnName.text = userListResponse.name.last
+            tvEmail.text = userListResponse.email
         }
         holder.itemView.setOnClickListener{
             onUserListItemClickListener.onClick(userListResponse)
