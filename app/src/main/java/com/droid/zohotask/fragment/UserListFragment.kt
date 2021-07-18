@@ -41,9 +41,11 @@ class UserListFragment : Fragment(R.layout.fragment_user_list){
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentUserListBinding.bind(view)
 
-        viewModel.getUserList()
+        viewModel.getUserList(5)
 
         setupRecyclerView()
+
+        viewModel.getsearch()
 
         lifecycleScope.launchWhenCreated {
             viewModel.userList.collect { event ->
@@ -55,7 +57,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list){
                         Log.d("UserListFragment","$result")
                     }
                     is MainViewModel.UserListEvent.Failure->{
-                        viewModel.getUserList()
+                            viewModel.getUserList(5)
                     //Show Toast
                     }
                     is MainViewModel.UserListEvent.Loading->{

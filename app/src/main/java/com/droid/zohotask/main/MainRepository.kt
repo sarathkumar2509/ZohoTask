@@ -9,5 +9,5 @@ import com.droid.zohotask.utils.Resource
  */
 interface MainRepository {
 
-    suspend fun getUserList() : Resource<UserResponseItem>
+    suspend fun getUserList(count : Int) : Resource<UserResponseItem>
 }
