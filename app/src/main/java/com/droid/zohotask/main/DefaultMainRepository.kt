@@ -20,6 +20,9 @@ class DefaultMainRepository @Inject constructor(
             Log.d("DefaultMainRepository","$count")
             Log.d("DefaultMainRepository","$count")
             val response = api.getUserList(count)
+
+            val response = api.getUserList(20)
+
             Log.d("DefaultMainRepository","$response")
             val result = response.body()
             if (response.isSuccessful && result != null) {
