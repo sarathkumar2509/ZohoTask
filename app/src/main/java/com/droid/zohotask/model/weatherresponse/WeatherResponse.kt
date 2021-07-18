@@ -1,6 +1,5 @@
 package com.droid.zohotask.model.weatherresponse
 
-import com.androimads.retrolin.*
 import com.google.gson.annotations.SerializedName
 import java.util.ArrayList
 
