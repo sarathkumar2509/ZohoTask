@@ -27,5 +27,3 @@ l
 <app/src/main/java/com/droid/zohotask/model/response/Login.kt,3\1\31c0c8d20153700666caa7ef19a2a04d9e983fa4
 k
 ;app/src/main/java/com/droid/zohotask/model/response/Name.kt,0\4\0430a32a47e04fb7fd8d55d85d70316b6da0556b
-m
-=app/src/main/java/com/droid/zohotask/model/response/Result.kt,5\4\54768438fba98154837318cecf8c5780ac0f5390

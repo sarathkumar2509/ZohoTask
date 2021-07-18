@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droid.zohotask.R
 import com.droid.zohotask.adapter.UserListAdapter
@@ -45,7 +46,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list){
 
         setupRecyclerView()
 
-        viewModel.getsearch()
+//        viewModel.getsearch()
 
         lifecycleScope.launchWhenCreated {
             viewModel.userList.collect { event ->
@@ -74,6 +75,14 @@ class UserListFragment : Fragment(R.layout.fragment_user_list){
                 userListAdapter = UserListAdapter(context,object : OnUserListItemClick{
                     override fun onClick(result: Result) {
                         Toast.makeText(context,"Clicked",Toast.LENGTH_SHORT).show()
+
+                        val bundle = Bundle().apply {
+                            putSerializable("userDetail",result)
+                        }
+                        findNavController().navigate(
+                            R.id.action_userListFragment_to_userDetailFragment,
+                            bundle
+                        )
                     }
                 })
 

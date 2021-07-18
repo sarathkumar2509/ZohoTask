@@ -46,7 +46,7 @@ class MainViewModel @ViewModelInject constructor(
 
                         if (data != null) {
                             for (i in data.results) {
-                                database.getUserListDao().insert(i)
+                                //database.getUserListDao().insert(i)
                                 Log.d("insert ${i.name}", "$i")
                             }
 
