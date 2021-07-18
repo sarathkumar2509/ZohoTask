@@ -8,10 +8,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.droid.zohotask.R
-import com.droid.zohotask.databinding.FragmentUserListBinding
 import com.droid.zohotask.databinding.UserlistItemBinding
 import com.droid.zohotask.listener.OnUserListItemClick
-import com.droid.zohotask.model.response.Result
+import com.droid.zohotask.model.userresponse.Result
 
 /**
  * Created by SARATH on 17-07-2021

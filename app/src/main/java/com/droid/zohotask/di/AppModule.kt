@@ -7,7 +7,9 @@ import com.droid.zohotask.db.UserListDao
 import com.droid.zohotask.main.DefaultMainRepository
 import com.droid.zohotask.main.MainRepository
 import com.droid.zohotask.model.UserApi
+import com.droid.zohotask.model.WeatherApi
 import com.droid.zohotask.utils.Constants.BASE_URL
+import com.droid.zohotask.utils.Constants.WEATHER_BASE_URL
 import com.droid.zohotask.utils.DispatcherProvider
 import dagger.Module
 import dagger.Provides
@@ -44,7 +46,15 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideMainRepository(api: UserApi) : MainRepository = DefaultMainRepository(api)
+    fun provideWeatherApi() : WeatherApi = Retrofit.Builder()
+        .baseUrl(WEATHER_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(WeatherApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideMainRepository(api: UserApi , weatherApi: WeatherApi) : MainRepository = DefaultMainRepository(api,weatherApi)
 
     @Singleton
     @Provides

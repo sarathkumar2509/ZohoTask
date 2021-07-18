@@ -20,7 +20,7 @@
 
         <argument
             android:name="userDetail"
-            app:argType="com.droid.zohotask.model.response.Result" />
+            app:argType="com.droid.zohotask.model.userresponse.Result" />
     </fragment>
 
 

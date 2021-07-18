@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.droid.zohotask.model.response.Result
+import com.droid.zohotask.model.userresponse.Result
 
 /**
  * Created by SARATH on 17-07-2021

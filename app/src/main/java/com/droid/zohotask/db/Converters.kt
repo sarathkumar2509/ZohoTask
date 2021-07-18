@@ -3,7 +3,7 @@ package com.droid.zohotask.db
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.room.TypeConverter
-import com.droid.zohotask.model.response.*
+import com.droid.zohotask.model.userresponse.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -56,7 +56,7 @@ class Converters {
     }
 
     @TypeConverter
-    fun toLogin(login : String) : Login{
+    fun toLogin(login : String) : Login {
         val type = object : TypeToken<Login>() {}.type
         return Gson().fromJson(login,type)
     }

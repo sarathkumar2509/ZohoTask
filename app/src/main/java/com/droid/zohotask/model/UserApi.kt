@@ -1,7 +1,6 @@
 package com.droid.zohotask.model
 
-import com.droid.zohotask.model.response.Result
-import com.droid.zohotask.model.response.UserResponseItem
+import com.droid.zohotask.model.userresponse.UserResponseItem
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

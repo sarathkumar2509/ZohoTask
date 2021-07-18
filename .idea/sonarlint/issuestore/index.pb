@@ -7,14 +7,8 @@ X
 (gradle/wrapper/gradle-wrapper.properties,f\b\fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
 d
 4app/src/main/java/com/droid/zohotask/BaseActivity.kt,5\7\5796c0a66be8427f8f5d58ce3fcff48d71404ec3
-d
-4app/src/main/java/com/droid/zohotask/di/AppModule.kt,2\f\2fcc0e110a701e4f08368da2aa8d4f79295091c5
-<
-build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
 P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
-e
-5app/src/main/java/com/droid/zohotask/db/Converters.kt,b\e\beb70806eb321e8c90fac7299ef971242033dda0
 j
 :app/src/main/java/com/droid/zohotask/model/response/Dob.kt,d\a\da09e3eae18c902cc6601640e3db0773378bc7df
 i
@@ -27,3 +21,7 @@ l
 <app/src/main/java/com/droid/zohotask/model/response/Login.kt,3\1\31c0c8d20153700666caa7ef19a2a04d9e983fa4
 k
 ;app/src/main/java/com/droid/zohotask/model/response/Name.kt,0\4\0430a32a47e04fb7fd8d55d85d70316b6da0556b
+@
+app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
+t
+Dapp/src/main/java/com/droid/zohotask/listener/OnUserListItemClick.kt,1\8\188e34c24337a2da181be81575c1201454b2eb9c

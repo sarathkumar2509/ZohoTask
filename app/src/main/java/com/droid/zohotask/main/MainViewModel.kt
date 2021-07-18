@@ -5,7 +5,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.droid.zohotask.db.UserDatabase
-import com.droid.zohotask.model.response.Result
+import com.droid.zohotask.model.userresponse.Result
 import com.droid.zohotask.utils.DispatcherProvider
 import com.droid.zohotask.utils.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -62,12 +62,35 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
+
     //for checking
     fun getsearch(){
         viewModelScope.launch(dispatchers.io) {
             val result = database.getUserListDao().getUserSearchList("'%A%'")
+
             Log.d("search","$result")
         }
     }
 
+
+    fun getWeather(){
+        viewModelScope.launch(dispatchers.io) {
+//            _userList.value = UserListEvent.Loading
+
+            when(val userListResponse = repository.getWeather()){
+                is Resource.Error ->{
+//                    _userList.value = UserListEvent.Failure(userListResponse.message!!)
+                }
+                is Resource.Success ->{
+                    val data =userListResponse.data
+
+                    if (data == null) {
+//                        _userList.value = UserListEvent.Failure("UnExpected Error")
+                    } else {
+//                        _userList.value = UserListEvent.Success(data.results)
+                    }
+                }
+            }
+        }
+    }
 }

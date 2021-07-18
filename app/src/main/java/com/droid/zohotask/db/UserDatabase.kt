@@ -3,8 +3,8 @@ package com.droid.zohotask.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.droid.zohotask.model.response.Result
-import com.droid.zohotask.model.response.UserResponseItem
+import com.droid.zohotask.model.userresponse.Result
+
 
 /**
  * Created by SARATH on 17-07-2021

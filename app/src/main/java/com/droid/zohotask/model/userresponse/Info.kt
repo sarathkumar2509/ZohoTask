@@ -1,4 +1,4 @@
-package com.droid.zohotask.model.response
+package com.droid.zohotask.model.userresponse
 
 import com.google.gson.annotations.SerializedName
 

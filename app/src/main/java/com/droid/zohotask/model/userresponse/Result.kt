@@ -1,13 +1,11 @@
-package com.droid.zohotask.model.response
+package com.droid.zohotask.model.userresponse
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-@Entity(
-    tableName ="userlist"
-)
+@Entity(tableName ="userlist")
 data class Result(
     @PrimaryKey(autoGenerate = true)
     @SerializedName("dbid")
