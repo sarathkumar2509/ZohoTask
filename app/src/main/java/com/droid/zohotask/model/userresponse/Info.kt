@@ -1,6 +1,7 @@
 package com.droid.zohotask.model.userresponse
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Info(
     @SerializedName("page")
@@ -11,4 +12,4 @@ data class Info(
     val seed: String,
     @SerializedName("version")
     val version: String
-)
+) : Serializable

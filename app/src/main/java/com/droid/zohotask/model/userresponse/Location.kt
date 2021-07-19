@@ -1,6 +1,7 @@
 package com.droid.zohotask.model.userresponse
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Location(
     @SerializedName("city")
@@ -17,4 +18,4 @@ data class Location(
     val street: Street,
     @SerializedName("timezone")
     val timezone: Timezone
-)
+) : Serializable

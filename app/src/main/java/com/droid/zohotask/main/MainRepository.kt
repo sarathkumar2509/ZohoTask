@@ -1,7 +1,8 @@
 package com.droid.zohotask.main
 
+import com.droid.zohotask.model.userresponse.Result
 import com.droid.zohotask.model.userresponse.UserResponseItem
-import com.droid.zohotask.model.weatherresponse.WeatherResponse
+import com.droid.zohotask.model.weather.WResponse
 import com.droid.zohotask.utils.Resource
 
 /**
@@ -10,7 +11,10 @@ import com.droid.zohotask.utils.Resource
 interface MainRepository {
 
     suspend fun getUserList(count : Int) : Resource<UserResponseItem>
-//    suspend fun getUserList() : Resource<UserResponseItem>
 
-    suspend fun getWeather() : Resource<WeatherResponse>
+    suspend fun getWeather(lat : Int, lon : Int, appId : String) : Resource<WResponse>
+
+    suspend fun getUserListSizeFromDB() : Resource<List<Result>>
+
+    suspend fun insertUserItem(result: Result) : Boolean
 }

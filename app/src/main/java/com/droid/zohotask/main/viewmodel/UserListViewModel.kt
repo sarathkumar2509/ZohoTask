@@ -1,10 +1,10 @@
-package com.droid.zohotask.main
+package com.droid.zohotask.main.viewmodel
 
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.droid.zohotask.db.UserDatabase
+import com.droid.zohotask.main.MainRepository
 import com.droid.zohotask.model.userresponse.Result
 import com.droid.zohotask.utils.DispatcherProvider
 import com.droid.zohotask.utils.Resource
@@ -15,14 +15,11 @@ import kotlinx.coroutines.launch
 /**
  * Created by SARATH on 17-07-2021
  */
-class MainViewModel @ViewModelInject constructor(
+class UserListViewModel @ViewModelInject constructor(
     private val dispatchers: DispatcherProvider,
-    private val repository: MainRepository,
-    private val database: UserDatabase
+    private val repository: MainRepository
 ) : ViewModel(){
 
-
-    //revert database from constructor
     sealed class UserListEvent {
         class Success(val result: List<Result>) : UserListEvent()
         class Failure(val error: String) : UserListEvent()
@@ -37,60 +34,45 @@ class MainViewModel @ViewModelInject constructor(
         viewModelScope.launch(dispatchers.io) {
             _userList.value = UserListEvent.Loading
 
-            when(val userListResponse = repository.getUserList(count)){
+            if (repository.getUserListSizeFromDB().data?.size != null){
+
+                when(val userListResponse = repository.getUserListSizeFromDB()){
                     is Resource.Error ->{
                         _userList.value = UserListEvent.Failure(userListResponse.message!!)
                     }
+
                     is Resource.Success ->{
                         val data =userListResponse.data
+                                if (data == null) {
+                                _userList.value = UserListEvent.Failure("UnExpected Error")
+                                } else {
+                                _userList.value = UserListEvent.Success(data)
+                                }
+                    }
+                }
+            }else{
+                when(val userListResponse = repository.getUserList(count)){
+                    is Resource.Error ->{
+                        _userList.value = UserListEvent.Failure(userListResponse.message!!)
+                    }
 
+                    is Resource.Success ->{
+                        val data =userListResponse.data
                         if (data != null) {
                             for (i in data.results) {
-                                //database.getUserListDao().insert(i)
+                                repository.insertUserItem(i)
                                 Log.d("insert ${i.name}", "$i")
                             }
-
                         }
-
                         if (data == null) {
                             _userList.value = UserListEvent.Failure("UnExpected Error")
                         } else {
                             _userList.value = UserListEvent.Success(data.results)
                         }
                     }
-            }
-        }
-    }
-
-
-    //for checking
-    fun getsearch(){
-        viewModelScope.launch(dispatchers.io) {
-            val result = database.getUserListDao().getUserSearchList("'%A%'")
-
-            Log.d("search","$result")
-        }
-    }
-
-
-    fun getWeather(){
-        viewModelScope.launch(dispatchers.io) {
-//            _userList.value = UserListEvent.Loading
-
-            when(val userListResponse = repository.getWeather()){
-                is Resource.Error ->{
-//                    _userList.value = UserListEvent.Failure(userListResponse.message!!)
-                }
-                is Resource.Success ->{
-                    val data =userListResponse.data
-
-                    if (data == null) {
-//                        _userList.value = UserListEvent.Failure("UnExpected Error")
-                    } else {
-//                        _userList.value = UserListEvent.Success(data.results)
-                    }
                 }
             }
         }
     }
+
 }
