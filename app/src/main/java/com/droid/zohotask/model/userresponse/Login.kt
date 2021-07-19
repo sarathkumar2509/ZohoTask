@@ -1,6 +1,7 @@
 package com.droid.zohotask.model.userresponse
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Login(
     @SerializedName("md5")
@@ -17,4 +18,4 @@ data class Login(
     val username: String,
     @SerializedName("uuid")
     val uuid: String
-)
+) : Serializable

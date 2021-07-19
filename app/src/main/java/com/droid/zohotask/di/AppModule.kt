@@ -54,7 +54,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideMainRepository(api: UserApi , weatherApi: WeatherApi) : MainRepository = DefaultMainRepository(api,weatherApi)
+    fun provideMainRepository(api: UserApi , weatherApi: WeatherApi,database: UserDatabase) : MainRepository = DefaultMainRepository(api,weatherApi,database)
 
     @Singleton
     @Provides

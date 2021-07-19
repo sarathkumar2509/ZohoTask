@@ -17,4 +17,7 @@ interface UserListDao {
 
     @Query("SELECT * FROM userlist WHERE name LIKE :key")
     fun getUserSearchList(key: String) : List<Result>
+
+    @Query("SELECT * FROM userlist")
+    fun getUserListSizeFromDB() : List<Result>
 }

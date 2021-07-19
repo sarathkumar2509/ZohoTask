@@ -11,12 +11,15 @@ import com.droid.zohotask.R
 import com.droid.zohotask.databinding.UserlistItemBinding
 import com.droid.zohotask.listener.OnUserListItemClick
 import com.droid.zohotask.model.userresponse.Result
+import java.util.*
 
 /**
  * Created by SARATH on 17-07-2021
  */
 class UserListAdapter(private val context: Context, private val onUserListItemClickListener: OnUserListItemClick) : RecyclerView.Adapter<UserListAdapter.UserListViewHolder>(){
 
+
+    private val random = Random()
     inner class UserListViewHolder(val binding : UserlistItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     private val diffCallback = object : DiffUtil.ItemCallback<Result>(){
@@ -28,6 +31,10 @@ class UserListAdapter(private val context: Context, private val onUserListItemCl
             return oldItem.email == newItem.email
         }
 
+    }
+
+    private fun getRandomInt(max : Int, min : Int) : Int{
+        return random.nextInt(max - min ) + min
     }
 
 
@@ -52,15 +59,14 @@ class UserListAdapter(private val context: Context, private val onUserListItemCl
         val userListResponse = userListResponse[position]
         holder.binding.apply {
 
-            Glide.with(context).load(userListResponse.picture?.medium).placeholder(R.drawable.ic_baseline_account_circle_24).circleCrop().into(ivPicture)
+            ivPicture.layoutParams.height = getRandomInt(550,200)
+            Glide.with(context).load(userListResponse.picture?.large).placeholder(R.drawable.ic_baseline_account_circle_24).into(ivPicture)
 
-            Glide.with(context).load(userListResponse.picture?.medium).placeholder(R.drawable.ic_baseline_account_circle_24).circleCrop().into(ivPicture)
             tvFirstName.text = userListResponse.name?.first
             tvLastnName.text = userListResponse.name?.last
-            tvEmail.text = userListResponse.email
         }
-        holder.itemView.setOnClickListener{
-            onUserListItemClickListener.onClick(userListResponse)
+             holder.itemView.setOnClickListener{
+                   onUserListItemClickListener.onClick(userListResponse)
         }
     }
 

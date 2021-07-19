@@ -105,4 +105,14 @@ dependencies {
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:2.3.0"
     kapt"androidx.room:room-compiler:2.3.0"
+
+    //lottie animation
+    implementation "com.airbnb.android:lottie:3.4.0"
+
+    // Easy Permissions
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
+    //Google Play Services
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+
 }

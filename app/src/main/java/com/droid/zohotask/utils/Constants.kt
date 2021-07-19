@@ -10,8 +10,16 @@ object Constants {
 
     const val AppId = "50cdbb4ad242e89494b61e4c0a0baeee"
 
-    const val lat = "35"
+    const val PressureUnit = "mbar"
 
-    const val lon = "139"
+    const val WindSpeedUnit = "Km/Hr"
+
+    const val TemperatureUnit = "Celsius"
+
+    const val HumidityUnit = "%"
+
+    const val REQUEST_CODE_LOCATION_PERMISSION = 1
+
+
 }
 
