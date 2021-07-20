@@ -1,4 +1,4 @@
-package com.droid.zohotask.model
+package com.droid.zohotask.model.api
 
 import com.droid.zohotask.model.weather.WResponse
 import retrofit2.Response

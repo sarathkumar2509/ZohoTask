@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.droid.zohotask.model.userresponse.Result
+import com.droid.zohotask.utils.Resource
 
 /**
  * Created by SARATH on 17-07-2021
@@ -15,7 +16,7 @@ interface UserListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(result: Result)
 
-    @Query("SELECT * FROM userlist WHERE name LIKE :key")
+    @Query("SELECT * FROM userlist WHERE name LIKE :key ")
     fun getUserSearchList(key: String) : List<Result>
 
     @Query("SELECT * FROM userlist")

@@ -6,8 +6,8 @@ import com.droid.zohotask.db.UserDatabase
 import com.droid.zohotask.db.UserListDao
 import com.droid.zohotask.main.DefaultMainRepository
 import com.droid.zohotask.main.MainRepository
-import com.droid.zohotask.model.UserApi
-import com.droid.zohotask.model.WeatherApi
+import com.droid.zohotask.model.api.UserApi
+import com.droid.zohotask.model.api.WeatherApi
 import com.droid.zohotask.utils.Constants.BASE_URL
 import com.droid.zohotask.utils.Constants.WEATHER_BASE_URL
 import com.droid.zohotask.utils.DispatcherProvider
@@ -54,7 +54,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideMainRepository(api: UserApi , weatherApi: WeatherApi,database: UserDatabase) : MainRepository = DefaultMainRepository(api,weatherApi,database)
+    fun provideMainRepository(api: UserApi, weatherApi: WeatherApi, database: UserDatabase) : MainRepository = DefaultMainRepository(api,weatherApi,database)
 
     @Singleton
     @Provides

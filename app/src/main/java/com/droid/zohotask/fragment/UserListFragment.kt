@@ -2,15 +2,19 @@ package com.droid.zohotask.fragment
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.droid.zohotask.R
 import com.droid.zohotask.adapter.UserListAdapter
@@ -18,7 +22,11 @@ import com.droid.zohotask.databinding.FragmentUserListBinding
 import com.droid.zohotask.listener.OnUserListItemClick
 import com.droid.zohotask.main.viewmodel.UserListViewModel
 import com.droid.zohotask.model.userresponse.Result
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * Created by SARATH on 17-07-2021
@@ -71,19 +79,43 @@ class UserListFragment : Fragment(R.layout.fragment_user_list){
                 }
             }
         }
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.searchList.collect { event ->
+                when(event){
+
+                    is UserListViewModel.SearchUserEvent.Success ->{
+                        binding.pbUserListFragment.isVisible = false
+                        var result = event.result
+                        userListAdapter.userListResponse = result.toMutableList()
+                    }
+
+                    is UserListViewModel.SearchUserEvent.Failure->{
+                        Toast.makeText(requireContext(),"No User Found",Toast.LENGTH_SHORT).show()
+                    }
+
+                    is UserListViewModel.SearchUserEvent.Loading->{
+                        binding.pbUserListFragment.isVisible = true
+                    }
+
+                    else -> Unit
+                }
+            }
+        }
+
+        var job : Job? = null
+        binding.etSearch.addTextChangedListener { editable ->
+            job?.cancel()
+            job = MainScope().launch {
+                    editable?.let {
+                        if (editable.toString().isNotEmpty()){
+                            var query = "%$editable%"
+                            viewModel.searchUser(query)
+                        }
+                    }
+            }
+        }
     }
-
-
-    override fun onPause() {
-        super.onPause()
-        state = binding.rvUserList.layoutManager?.onSaveInstanceState()!!
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.rvUserList.layoutManager?.onRestoreInstanceState(state)
-    }
-
 
     private fun setupRecyclerView() {
             binding.rvUserList.apply {
@@ -105,4 +137,19 @@ class UserListFragment : Fragment(R.layout.fragment_user_list){
                 layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
             }
     }
+
+//    private fun search(){
+//        var job : Job? = null
+//        binding.etSearch.addTextChangedListener { editable ->
+//            job?.cancel()
+//            job = MainScope().launch {
+//                editable?.let {
+//                    if (editable.toString().isNotEmpty()){
+//                        var query = "%$editable%"
+//                        viewModel.searchUser(query)
+//                    }
+//                }
+//            }
+//        }
+//    }
 }

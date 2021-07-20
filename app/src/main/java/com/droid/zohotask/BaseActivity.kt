@@ -215,5 +215,4 @@ class BaseActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks {
 
         }
     }
-
 }
