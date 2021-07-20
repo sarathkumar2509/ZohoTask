@@ -2,8 +2,8 @@ package com.droid.zohotask.main
 
 import android.util.Log
 import com.droid.zohotask.db.UserDatabase
-import com.droid.zohotask.model.UserApi
-import com.droid.zohotask.model.WeatherApi
+import com.droid.zohotask.model.api.UserApi
+import com.droid.zohotask.model.api.WeatherApi
 import com.droid.zohotask.model.userresponse.Result
 import com.droid.zohotask.model.userresponse.UserResponseItem
 import com.droid.zohotask.model.weather.WResponse
@@ -67,5 +67,22 @@ class DefaultMainRepository @Inject constructor(
     override suspend fun insertUserItem(result: Result) : Boolean {
         database.getUserListDao().insert(result)
         return true
+    }
+
+    override suspend fun searchUser(searchQuery: String): Resource<List<Result>> {
+        return try {
+            Log.d("SEARCHUSER","$searchQuery")
+            val response = database.getUserListDao().getUserSearchList(searchQuery)
+            Log.d("SEARCHUSER","$response")
+
+            val result = response
+            if (result!!.isNotEmpty()) {
+                Resource.Success(result)
+            } else {
+                Resource.Error("Error")
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An Error Occurred")
+        }
     }
 }

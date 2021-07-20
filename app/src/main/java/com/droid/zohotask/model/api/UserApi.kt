@@ -1,4 +1,4 @@
-package com.droid.zohotask.model
+package com.droid.zohotask.model.api
 
 import com.droid.zohotask.model.userresponse.UserResponseItem
 import retrofit2.Response

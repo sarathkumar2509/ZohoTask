@@ -17,4 +17,6 @@ interface MainRepository {
     suspend fun getUserListSizeFromDB() : Resource<List<Result>>
 
     suspend fun insertUserItem(result: Result) : Boolean
+
+    suspend fun searchUser(searchQuery : String) : Resource<List<Result>>
 }
