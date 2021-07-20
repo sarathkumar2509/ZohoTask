@@ -14,7 +14,7 @@ object Constants {
 
     const val WindSpeedUnit = "Km/Hr"
 
-    const val TemperatureUnit = "Celsius"
+    const val TemperatureUnit = "C "
 
     const val HumidityUnit = "%"
 

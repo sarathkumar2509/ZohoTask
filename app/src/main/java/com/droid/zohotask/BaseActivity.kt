@@ -19,23 +19,18 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
 import com.droid.zohotask.databinding.ActivityBaseBinding
 import com.droid.zohotask.main.viewmodel.BaseViewModel
-import com.droid.zohotask.main.viewmodel.UserDetailViewModel
-import com.droid.zohotask.main.viewmodel.UserListViewModel
 import com.droid.zohotask.model.weather.WResponse
 import com.droid.zohotask.utils.Constants
 import com.droid.zohotask.utils.Constants.REQUEST_CODE_LOCATION_PERMISSION
-import com.droid.zohotask.utils.Permissions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.withContext
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
 @AndroidEntryPoint
-class BaseActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks {
+class BaseActivity : AppCompatActivity()  {
 
     private lateinit var binding: ActivityBaseBinding
 
@@ -51,9 +46,9 @@ class BaseActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks {
 
     private lateinit var weatherImage : LottieAnimationView
 
-    private var lat : Int = 0
+    private var lat : Int? = 0
 
-    private var lon : Int = 0
+    private var lon : Int? = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,8 +71,6 @@ class BaseActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks {
         progressBar = this.findViewById(R.id.pbTitle)
 
         requestPermission()
-
-        viewModel.getUserLocationWeather(lat,lon,Constants.AppId)
 
         lifecycleScope.launchWhenCreated {
             viewModel.userLocationWeather.collect { event ->
@@ -149,56 +142,26 @@ class BaseActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks {
             }
         }
     }
-
-    private fun requestPermission() {
-        if (Permissions.hasLocationPermission(this)) {
-            Log.d("requestPermissionPER", "${Permissions.hasLocationPermission(this)}")
-            getLocations()
-            return
-        }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            EasyPermissions.requestPermissions(
-                this, "Location Permission Always Needed to Know Your Location",
-                REQUEST_CODE_LOCATION_PERMISSION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-        }
-        else{
-            EasyPermissions.requestPermissions(this,"Location Permission Always Needed to Know Your Location",
-                REQUEST_CODE_LOCATION_PERMISSION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            )
-        }
-    }
-
-    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION , Manifest.permission.ACCESS_BACKGROUND_LOCATION).toString()
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            getLocations()
-        }
-    }
-
-    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            AppSettingsDialog.Builder(this).build().show()
-        } else {
-            requestPermission()
-        }
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        if(requestCode ==1){
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                {
+                    getLocations()
+                }
+                else {
+                    Toast.makeText(this,"Permission Denied",Toast.LENGTH_LONG).show()
+                }
+            }
+        }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     @SuppressLint("MissingPermission")
@@ -207,12 +170,27 @@ class BaseActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks {
             if (it == null) {
                 Toast.makeText(this, "Can't Get Your Location", Toast.LENGTH_SHORT).show()
             } else {
+                Log.d("ZOHOTASKTEST","location : "+it)
                 it.apply {
                     lat = it.latitude.toInt()
                     lon = it.longitude.toInt()
                 }
+                viewModel.getUserLocationWeather(lat!!.toInt(), lon!!.toInt(),Constants.AppId)
             }
 
+        }
+    }
+
+    private  fun requestPermission(){
+        // check permission
+        if ( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // reuqest for permission
+            ActivityCompat.requestPermissions(this, arrayOf( Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION), 1)
+        } else {
+            getLocations()
+
+            // already permission granted
         }
     }
 }

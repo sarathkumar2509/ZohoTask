@@ -15,8 +15,6 @@ q
 Aapp/src/main/java/com/droid/zohotask/model/userresponse/Result.kt,c\5\c56a4f3cb6d685bc52a7bc1b70ba4f54206515a8
 g
 7app/src/main/java/com/droid/zohotask/UserApplication.kt,d\f\df40670b6df9f86fbede34498c27abcd96363d43
-P
- app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 t
 Dapp/src/main/java/com/droid/zohotask/main/viewmodel/BaseViewModel.kt,3\6\366066effbdb7879f91dda971e89644bc053b676
 l
