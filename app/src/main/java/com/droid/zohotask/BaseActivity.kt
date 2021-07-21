@@ -2,32 +2,35 @@ package com.droid.zohotask
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.airbnb.lottie.LottieAnimationView
 import com.droid.zohotask.databinding.ActivityBaseBinding
 import com.droid.zohotask.main.viewmodel.BaseViewModel
 import com.droid.zohotask.model.weather.WResponse
 import com.droid.zohotask.utils.Constants
-import com.droid.zohotask.utils.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import pub.devrel.easypermissions.AppSettingsDialog
-import pub.devrel.easypermissions.EasyPermissions
+
 
 @AndroidEntryPoint
 class BaseActivity : AppCompatActivity()  {
@@ -45,11 +48,21 @@ class BaseActivity : AppCompatActivity()  {
     private lateinit var progressBar: ProgressBar
 
     private lateinit var weatherImage : LottieAnimationView
+    lateinit var navigation: NavController
 
-    private var lat : Int? = 0
+    private  var lat :Int? = 0
 
-    private var lon : Int? = 0
+    private  var lon :Int? = 0
 
+    fun showNoNetToast( ) {
+        Toast.makeText(this,"No Internet",Toast.LENGTH_LONG).show()
+    }
+
+    private fun isConnectedToInternet(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = cm.activeNetworkInfo
+        return netInfo != null && netInfo.isConnectedOrConnecting
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBaseBinding.inflate(layoutInflater)
@@ -72,6 +85,10 @@ class BaseActivity : AppCompatActivity()  {
 
         requestPermission()
 
+
+       if(! isConnectedToInternet(this)){
+            showNoNetToast()
+        }
         lifecycleScope.launchWhenCreated {
             viewModel.userLocationWeather.collect { event ->
                 when(event){
@@ -93,6 +110,11 @@ class BaseActivity : AppCompatActivity()  {
             }
         }
 
+    }
+
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navigation.navigateUp() || super.onSupportNavigateUp()
     }
 
     private fun setWeatherData(result: WResponse) {
@@ -142,35 +164,39 @@ class BaseActivity : AppCompatActivity()  {
             }
         }
     }
+
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if(requestCode ==1){
-            // If request is cancelled, the result arrays are empty.
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//
+        if (requestCode ==1){
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-                {
-                    getLocations()
-                }
-                else {
-                    Toast.makeText(this,"Permission Denied",Toast.LENGTH_LONG).show()
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                        {
+                            getLocations()
+
+                    }
+                 else {
+                        Toast.makeText(this,"Permission Denied",Toast.LENGTH_LONG).show()
                 }
             }
-        }
+            }
+
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     @SuppressLint("MissingPermission")
     private fun getLocations() {
-        fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+    fusedLocationProviderClient.lastLocation?.addOnSuccessListener {
             if (it == null) {
                 Toast.makeText(this, "Can't Get Your Location", Toast.LENGTH_SHORT).show()
             } else {
-                Log.d("ZOHOTASKTEST","location : "+it)
                 it.apply {
                     lat = it.latitude.toInt()
                     lon = it.longitude.toInt()
@@ -181,7 +207,10 @@ class BaseActivity : AppCompatActivity()  {
         }
     }
 
-    private  fun requestPermission(){
+
+
+
+    fun requestPermission(){
         // check permission
         if ( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
             ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -193,4 +222,6 @@ class BaseActivity : AppCompatActivity()  {
             // already permission granted
         }
     }
+
+
 }

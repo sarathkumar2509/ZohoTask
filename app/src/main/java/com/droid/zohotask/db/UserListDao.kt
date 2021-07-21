@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.droid.zohotask.model.userresponse.Result
-import com.droid.zohotask.utils.Resource
 
 /**
  * Created by SARATH on 17-07-2021

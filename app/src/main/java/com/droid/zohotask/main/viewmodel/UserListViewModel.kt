@@ -11,6 +11,7 @@ import com.droid.zohotask.utils.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.*
 
 /**
  * Created by SARATH on 17-07-2021
@@ -33,6 +34,7 @@ class UserListViewModel @ViewModelInject constructor(
         object Loading : SearchUserEvent()
         object Empty : SearchUserEvent()
     }
+    private val random = Random()
 
     private val _userList = MutableStateFlow<UserListEvent>(UserListEvent.Empty)
     val userList: StateFlow<UserListEvent> = _userList
@@ -40,6 +42,9 @@ class UserListViewModel @ViewModelInject constructor(
     private val _searchList = MutableStateFlow<SearchUserEvent>(SearchUserEvent.Empty)
     val searchList: StateFlow<SearchUserEvent> = _searchList
 
+    private fun getRandomInt(max : Int, min : Int) : Int{
+        return random.nextInt(max - min ) + min
+    }
     fun getUserList(count : Int){
         viewModelScope.launch(dispatchers.io) {
             _userList.value = UserListEvent.Loading
@@ -70,6 +75,7 @@ class UserListViewModel @ViewModelInject constructor(
                         val data =userListResponse.data
                         if (data != null) {
                             for (i in data.results) {
+                                i.height=getRandomInt(550,200)
                                 repository.insertUserItem(i)
                                 Log.d("insert ${i.name}", "$i")
                             }

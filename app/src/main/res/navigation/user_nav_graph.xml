@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/user_nav_graph"
     app:startDestination="@id/userListFragment">
 
@@ -8,9 +9,10 @@
         android:id="@+id/userListFragment"
         android:name="com.droid.zohotask.fragment.UserListFragment"
         android:label="UserListFragment" >
+
         <action
-            android:id="@+id/action_userListFragment_to_userDetailFragment"
-            app:destination="@id/userDetailFragment"
+            android:id="@+id/action_userListFragment_to_profileDetailFragment"
+            app:destination="@id/profileDetailFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -18,21 +20,16 @@
 
     </fragment>
     <fragment
-        android:id="@+id/userDetailFragment"
-        android:name="com.droid.zohotask.fragment.UserDetailFragment"
-        android:label="UserDetailFragment">
-
+        android:id="@+id/profileDetailFragment"
+        android:name="com.droid.zohotask.fragment.ProfileDetailFragment"
+        android:label="fragment_profile_detail"
+        tools:layout="@layout/fragment_profile_detail" >
         <argument
-            android:name="userDetail"
+            android:name="profileDetail"
             app:argType="com.droid.zohotask.model.userresponse.Result" />
         <action
-            android:id="@+id/action_userDetailFragment_to_userListFragment"
-            app:destination="@id/userListFragment"/>
-<!--            app:enterAnim="@anim/slide_in_right"-->
-<!--            app:exitAnim="@anim/slide_out_left"-->
-<!--            app:popEnterAnim="@anim/slide_in_left"-->
-<!--            app:popExitAnim="@anim/slide_out_right"/>-->
-
+            android:id="@+id/action_profileDetailFragment_to_userListFragment"
+            app:destination="@id/userListFragment" />
     </fragment>
 
 

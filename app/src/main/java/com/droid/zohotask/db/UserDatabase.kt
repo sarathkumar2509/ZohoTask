@@ -11,7 +11,7 @@ import com.droid.zohotask.model.userresponse.Result
  */
 @Database(
     entities = [Result::class],
-    version = 1
+    version = 2
 )
 @TypeConverters(Converters::class)
 

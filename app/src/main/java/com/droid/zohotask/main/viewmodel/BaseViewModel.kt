@@ -1,6 +1,5 @@
 package com.droid.zohotask.main.viewmodel
 
-import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

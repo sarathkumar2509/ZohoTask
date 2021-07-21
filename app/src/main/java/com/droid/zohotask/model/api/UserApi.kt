@@ -10,9 +10,9 @@ import retrofit2.http.Query
  */
 interface UserApi {
 
-    @GET("api/")
+    @GET("/api?results=25")
     suspend fun getUserList(
-        @Query("results") results : Int
+        @Query("page") results : Int
     ) : Response<UserResponseItem>
 
 }

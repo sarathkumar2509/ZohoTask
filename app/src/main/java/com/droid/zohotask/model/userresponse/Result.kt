@@ -33,5 +33,8 @@ data class Result(
     @SerializedName("picture")
     val picture: Picture?,
     @SerializedName("registered")
-    val registered: Registered?
+    val registered: Registered?,
+    @SerializedName("height")
+    var height:Int?
+
 ) : Serializable

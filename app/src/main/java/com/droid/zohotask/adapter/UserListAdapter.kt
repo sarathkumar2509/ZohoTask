@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.droid.zohotask.R
 import com.droid.zohotask.databinding.UserlistItemBinding
 import com.droid.zohotask.listener.OnUserListItemClick
 import com.droid.zohotask.model.userresponse.Result
-import java.util.*
 
 /**
  * Created by SARATH on 17-07-2021
@@ -19,7 +19,6 @@ import java.util.*
 class UserListAdapter(private val context: Context, private val onUserListItemClickListener: OnUserListItemClick) : RecyclerView.Adapter<UserListAdapter.UserListViewHolder>(){
 
 
-    private val random = Random()
     inner class UserListViewHolder(val binding : UserlistItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     private val diffCallback = object : DiffUtil.ItemCallback<Result>(){
@@ -32,11 +31,6 @@ class UserListAdapter(private val context: Context, private val onUserListItemCl
         }
 
     }
-
-    private fun getRandomInt(max : Int, min : Int) : Int{
-        return random.nextInt(max - min ) + min
-    }
-
 
     private val differ = AsyncListDiffer(this,diffCallback)
     var userListResponse : MutableList<Result>
@@ -59,9 +53,9 @@ class UserListAdapter(private val context: Context, private val onUserListItemCl
         val userListResponse = userListResponse[position]
         holder.binding.apply {
 
-            ivPicture.layoutParams.height = getRandomInt(550,200)
-            Glide.with(context).load(userListResponse.picture?.large).placeholder(R.drawable.ic_baseline_account_circle_24).into(ivPicture)
-
+            ivPicture.layoutParams.height = userListResponse.height!!
+            Glide.with(context).load(userListResponse.picture?.large) .transition(
+                DrawableTransitionOptions.withCrossFade()).placeholder(R.drawable.ic_baseline_account_circle_24).into(ivPicture)
             tvFirstName.text = userListResponse.name?.first
             tvLastnName.text = userListResponse.name?.last
         }

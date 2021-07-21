@@ -8,7 +8,6 @@ import com.droid.zohotask.model.userresponse.Result
 import com.droid.zohotask.model.userresponse.UserResponseItem
 import com.droid.zohotask.model.weather.WResponse
 import com.droid.zohotask.utils.Resource
-import java.lang.Exception
 import javax.inject.Inject
 
 /**
