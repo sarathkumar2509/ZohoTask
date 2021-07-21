@@ -5,8 +5,6 @@ A
 settings.gradle,0\5\05efc8b1657769a27696d478ded1e95f38737233
 X
 (gradle/wrapper/gradle-wrapper.properties,f\b\fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
-<
-build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
 e
 5app/src/main/java/com/droid/zohotask/db/Converters.kt,b\e\beb70806eb321e8c90fac7299ef971242033dda0
 t
@@ -63,8 +61,6 @@ f
 6app/src/main/java/com/droid/zohotask/db/UserListDao.kt,f\c\fc6511cc55c4fd5923d5d14a44eb86371d3829b4
 f
 6app/src/main/java/com/droid/zohotask/utils/Resource.kt,8\c\8cd938916e07364c203b38608be942d57e3d5f37
-o
-?app/src/main/java/com/droid/zohotask/adapter/UserListAdapter.kt,1\a\1a043d3007e7ffffa79bad41cf71c0b98c14cb53
 k
 ;app/src/main/java/com/droid/zohotask/main/MainRepository.kt,2\5\254539b10f742910a9dcdf3940de9ac92f5283dd
 d

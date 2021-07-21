@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.droid.zohotask.main.MainRepository
 import com.droid.zohotask.model.userresponse.Result
+import com.droid.zohotask.utils.Constants
 import com.droid.zohotask.utils.DispatcherProvider
 import com.droid.zohotask.utils.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,13 +36,13 @@ class UserListViewModel @ViewModelInject constructor(
         object Empty : SearchUserEvent()
     }
     private val random = Random()
-
+    var userListCount = 1
     private val _userList = MutableStateFlow<UserListEvent>(UserListEvent.Empty)
     val userList: StateFlow<UserListEvent> = _userList
 
     private val _searchList = MutableStateFlow<SearchUserEvent>(SearchUserEvent.Empty)
     val searchList: StateFlow<SearchUserEvent> = _searchList
-
+     var  existingList : MutableList<Result>? = null
     private fun getRandomInt(max : Int, min : Int) : Int{
         return random.nextInt(max - min ) + min
     }
@@ -49,24 +50,24 @@ class UserListViewModel @ViewModelInject constructor(
         viewModelScope.launch(dispatchers.io) {
             _userList.value = UserListEvent.Loading
 
-            if (repository.getUserListSizeFromDB().data?.size != null){
-
-                when(val userListResponse = repository.getUserListSizeFromDB()){
-                    is Resource.Error ->{
-                        _userList.value = UserListEvent.Failure(userListResponse.message!!)
-                    }
-
-                    is Resource.Success ->{
-                        val data =userListResponse.data
-                                if (data == null) {
-                                _userList.value = UserListEvent.Failure("UnExpected Error")
-                                } else {
-                                _userList.value = UserListEvent.Success(data)
-                                }
-                    }
-                }
-            }else{
-                when(val userListResponse = repository.getUserList(count)){
+//            if (repository.getUserListSizeFromDB().data?.size != null){
+//
+//                when(val userListResponse = repository.getUserListSizeFromDB()){
+//                    is Resource.Error ->{
+//                        _userList.value = UserListEvent.Failure(userListResponse.message!!)
+//                    }
+//
+//                    is Resource.Success ->{
+//                        val data =userListResponse.data
+//                                if (data == null) {
+//                                _userList.value = UserListEvent.Failure("UnExpected Error")
+//                                } else {
+//                                _userList.value = UserListEvent.Success(data)
+//                                }
+//                    }
+//                }
+//            }else{
+                when(val userListResponse = repository.getUserList(Constants.QUERY_PAGE_SIZE)){
                     is Resource.Error ->{
                         _userList.value = UserListEvent.Failure(userListResponse.message!!)
                     }
@@ -77,17 +78,25 @@ class UserListViewModel @ViewModelInject constructor(
                             for (i in data.results) {
                                 i.height=getRandomInt(550,200)
                                 repository.insertUserItem(i)
+
                                 Log.d("insert ${i.name}", "$i")
+                            }
+
+                            if(existingList==null){
+                                existingList= data.results
+                            }
+                            else {
+                                existingList!!.addAll(data.results)
                             }
                         }
                         if (data == null) {
                             _userList.value = UserListEvent.Failure("UnExpected Error")
                         } else {
-                            _userList.value = UserListEvent.Success(data.results)
+                            _userList.value = UserListEvent.Success(existingList!!)
                         }
                     }
                 }
-            }
+           // }
         }
     }
 

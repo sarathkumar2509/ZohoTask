@@ -22,7 +22,6 @@ class DefaultMainRepository @Inject constructor(
         return try {
             Log.d("DefaultMainRepository","$count")
             val response = api.getUserList(count)
-
             val result = response.body()
             if (response.isSuccessful && result != null) {
                 Resource.Success(result)

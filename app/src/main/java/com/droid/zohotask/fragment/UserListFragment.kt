@@ -4,7 +4,9 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.View
+import android.widget.AbsListView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -12,6 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.droid.zohotask.R
 import com.droid.zohotask.adapter.UserListAdapter
@@ -19,6 +23,7 @@ import com.droid.zohotask.databinding.FragmentUserListBinding
 import com.droid.zohotask.listener.OnUserListItemClick
 import com.droid.zohotask.main.viewmodel.UserListViewModel
 import com.droid.zohotask.model.userresponse.Result
+import com.droid.zohotask.utils.Constants.QUERY_PAGE_SIZE
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collect
@@ -28,10 +33,11 @@ import kotlinx.coroutines.launch
  * Created by SARATH on 17-07-2021
  */
 class UserListFragment : Fragment(R.layout.fragment_user_list){
-
+    var pageno=2
     private lateinit var binding : FragmentUserListBinding
 
     private lateinit var viewModel: UserListViewModel
+
 
     private lateinit var userListAdapter: UserListAdapter
 
@@ -59,7 +65,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list){
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentUserListBinding.bind(view)
 
-        viewModel.getUserList(11)
+        viewModel.getUserList(QUERY_PAGE_SIZE)
 
         setupRecyclerView()
 
@@ -68,13 +74,15 @@ class UserListFragment : Fragment(R.layout.fragment_user_list){
                 when(event){
 
                     is UserListViewModel.UserListEvent.Success ->{
-                        binding.pbUserListFragment.isVisible = false
+                        hideProgressBar()
                         var result = event.result
                         userListAdapter.userListResponse = result.toMutableList()
                     }
 
                     is UserListViewModel.UserListEvent.Failure->{
-                            viewModel.getUserList(11)
+                        Log.d("SARATH","UserError  ${event.error}")
+//                        Toast.makeText(requireContext(),"Data fetch failed - "+event.error,Toast.LENGTH_SHORT).show()
+                        viewModel.getUserList(QUERY_PAGE_SIZE)
                     }
 
                     is UserListViewModel.UserListEvent.Loading->{
@@ -91,18 +99,18 @@ class UserListFragment : Fragment(R.layout.fragment_user_list){
                 when(event){
 
                     is UserListViewModel.SearchUserEvent.Success ->{
-                        binding.pbUserListFragment.isVisible = false
+                        hideProgressBar()
                         var result = event.result
                         userListAdapter.userListResponse = result.toMutableList()
                     }
 
                     is UserListViewModel.SearchUserEvent.Failure->{
-                        binding.pbUserListFragment.isVisible = false
+                        hideProgressBar()
                         Toast.makeText(requireContext(),"No User Found",Toast.LENGTH_SHORT).show()
                     }
 
                     is UserListViewModel.SearchUserEvent.Loading->{
-                        binding.pbUserListFragment.isVisible = true
+                        showProgressBar()
                     }
 
                     else -> Unit
@@ -120,7 +128,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list){
                             viewModel.searchUser(query)
                         }
                         else{
-                            viewModel.getUserList(25)
+                            viewModel.getUserList(QUERY_PAGE_SIZE)
                         }
                     }
             }
@@ -145,7 +153,91 @@ class UserListFragment : Fragment(R.layout.fragment_user_list){
 
                 adapter = userListAdapter
                 layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+                addOnScrollListener(this@UserListFragment.scrollListener)
             }
+    }
+
+
+    var isLoading = false
+    var isLastPage = false
+    var isScrolling = false
+
+    private fun hideProgressBar() {
+        binding.pbUserListFragment.visibility = View.INVISIBLE
+        isLoading = false
+    }
+
+    private fun showProgressBar() {
+        binding.pbUserListFragment.visibility = View.VISIBLE
+        isLoading = true
+    }
+
+
+
+    val scrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            val layoutManager = recyclerView.layoutManager as StaggeredGridLayoutManager
+
+           var  firstVisibleItemPosition =  IntArray(2)
+
+             layoutManager.findFirstVisibleItemPositions(firstVisibleItemPosition)
+            val visibleItemCount = layoutManager.childCount
+            val totalItemCount = layoutManager.itemCount
+            val scrolledItemCount =  firstVisibleItemPosition[0]
+            val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
+//            val isAtLastItem = firstVisibleItemPosition[0] + visibleItemCount >= totalItemCount
+            val isNotAtBeginning = firstVisibleItemPosition[0] >= 0
+            val invisibleItemCount = totalItemCount-(scrolledItemCount+visibleItemCount)
+            val isEnoughItemNotExists = invisibleItemCount <4
+//            val isTotalMoreThanVisible = visibleItemCount < totalItemCount-firstVisibleItemPosition[0] + visibleItemCount
+            val shouldPaginate = isNotLoadingAndNotLastPage  && isNotAtBeginning &&
+                    isEnoughItemNotExists && isScrolling
+
+            if(shouldPaginate) {
+                    viewModel.getUserList(QUERY_PAGE_SIZE)
+                    pageno++
+                lifecycleScope.launchWhenCreated {
+                    viewModel.userList.collect { event ->
+                        when(event){
+
+                            is UserListViewModel.UserListEvent.Success ->{
+                                hideProgressBar()
+                                var result = event.result
+                                userListAdapter.differ.submitList(result.toList())
+//                                val totalPages = result.size / QUERY_PAGE_SIZE + 2
+//                                isLastPage = viewModel.userListCount == totalPages
+                                userListAdapter.userListResponse = result.toMutableList()
+                            }
+
+                            is UserListViewModel.UserListEvent.Failure->{
+//                              Toast.makeText(requireContext(),"Data Fetch Failed",Toast.LENGTH_SHORT).show()
+                            }
+
+                            is UserListViewModel.UserListEvent.Loading->{
+                                binding.pbUserListFragment.isVisible = true
+                            }
+
+                            else -> Unit
+                        }
+                    }
+                }
+
+//                viewModel.getBreakingNews("in",pageno,QUERY_PAGE_SIZE)
+                pageno+=1
+                isScrolling = false
+            } else {
+                binding.rvUserList.setPadding(0, 0, 0, 0)
+            }
+        }
+
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                isScrolling = true
+            }
+        }
     }
 
 //    private fun search(){

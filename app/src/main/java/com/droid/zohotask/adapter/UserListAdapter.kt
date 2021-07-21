@@ -32,7 +32,7 @@ class UserListAdapter(private val context: Context, private val onUserListItemCl
 
     }
 
-    private val differ = AsyncListDiffer(this,diffCallback)
+    val differ = AsyncListDiffer(this,diffCallback)
     var userListResponse : MutableList<Result>
 
         get()=differ.currentList

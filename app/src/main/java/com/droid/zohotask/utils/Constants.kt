@@ -20,6 +20,6 @@ object Constants {
 
     const val REQUEST_CODE_LOCATION_PERMISSION = 1
 
-
+    const val QUERY_PAGE_SIZE=25
 }
 
